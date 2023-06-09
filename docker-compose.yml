@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+    nginx:
+        image: nginx:latest
+        volumes:
+            - ./:/var/www
+            - ./_docker/nginx/conf.d:/etc/nginx/conf.d
+        ports:
+            - "8876:80"
+        depends_on:
+            - app
+        container_name: nginx
+
+    app:
+        build:
+            context: .
+            dockerfile: _docker/app/Dockerfile
+        volumes:
+            - ./:/var/www
+        environment:
+            - DB_CONNECTION=mysql
+            - DB_HOST=db
+            - DB_PORT=3306
+            - DB_DATABASE=courier_test
+            - DB_USERNAME=root
+            - DB_PASSWORD=root
+        container_name: app
+    db:
+        image: mysql:8.0
+        restart: always
+        volumes:
+            - ./tmp/db:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: courier_test
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - 8101:3306
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+        container_name: db
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 8080:80
+#            - PMA_ARBITRARY=1
+        container_name: phpmyadmin
