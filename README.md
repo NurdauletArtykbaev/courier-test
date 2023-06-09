@@ -34,6 +34,5 @@
 7. phpMyAdmin доступен по адресу http://localhost:8101.
 8. Импортируйте в Postman courier-test.postman_collection.json.
 
-## Установка и запуск
 Чтобы остановить и удалить контейнеры Docker, выполните следующую команду в корневом каталоге проекта:
 - **docker-compose down**
